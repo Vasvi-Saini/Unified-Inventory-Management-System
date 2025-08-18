@@ -16,9 +16,12 @@ import {
 import {
   addProduct,
   createSale,
+  deleteProduct,
   getAllProducts,
   getProduct,
+  updateProduct
 } from "./resolver/products";
+
 
 const typeDefs = gql`
   type Query {
@@ -63,7 +66,8 @@ const typeDefs = gql`
     ): Product
     createSale(id: String!, quantity: Int!): Boolean
     deleteUser(id: String!): Boolean
-    updateproduct(prodid:String!,title:String,description:String,category:String,price:Float,stock:Int,img_url:String):Boolean
+    deleteProduct(id: String!) : Boolean
+    updateProduct(id:String!,title:String!,description:String!,category:String!,price:Float!,stock:Int!,imgUrl:String!) : Boolean
   }
 
   type Product {
@@ -102,7 +106,9 @@ const resolvers = {
     updateUserProfile,
     addProduct,
     createSale,
-    deleteUser
+    deleteUser,
+    updateProduct,
+    deleteProduct,
   },
 };
 

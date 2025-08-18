@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Product } from "../../../generated/prisma";
 import { useUserContext } from "../contexts/UserContext";
 import Removeprod from "../RemoveProd";
@@ -18,11 +19,12 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="rounded-lg shadow-lg p-6 relative">
+       <Link key={product.id} href={"/product/" + product.id}>
       <img
         src={product.imageUrl}
         alt={product.title}
         className="w-full h-48 object-cover rounded-lg mb-4"
-      />
+      /></Link>
 
       <div className="space-y-3">
         <div className="flex justify-between items-start">
@@ -47,7 +49,7 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.category}
           </span>
           
-          {user?.role == "manager" ? (
+          {user?.role !== "staff" && user ? (
             <div className="flex gap-2">
               <span>
                 <Updateproduct prod={product} />

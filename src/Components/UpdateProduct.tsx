@@ -8,60 +8,60 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 
 import { Pencil } from "lucide-react";
 
-import { useUserContext } from "./contexts/UserContext";
-import { Product } from "../../generated/prisma";
-import { updateprod } from "@/lib/gql/mutation";
+import { UPDATE_PRODUCT } from "@/lib/gql/mutation";
 import gqlClient from "@/services/graphql";
 import { toast } from "sonner";
+import { Product, ProductCategory } from "../../generated/prisma";
+import { useUserContext } from "./contexts/UserContext";
 
-function Updateproduct({prod}:{prod:Product}) {
-    const {user}=useUserContext();
+function Updateproduct({ prod }: { prod: Product }) {
+  const { user } = useUserContext();
   const [title, settitle] = useState(prod.title);
   const [description, setdescription] = useState(prod.description);
-  const [category, setcategory] = useState("others");
-  const [price, setprice] = useState("99.9");
-  const [stock, setstock] = useState("1");
+  const [category, setcategory] = useState(prod.category);
+  const [price, setprice] = useState(prod.price);
+  const [stock, setstock] = useState(prod.stock);
   const [img_url, setimg] = useState(prod.imageUrl);
 
-  async function handelupdateproduct(e: any) {
-   e.preventDefault();
-   e.stopPropagation();
+  async function handelupdateproduct() {
     try {
-      const resp: { updateproduct: Product } = await gqlClient.request(updateprod, {
-            prodid:prod.id,
+      const resp: { updated: boolean } = await gqlClient.request(
+        UPDATE_PRODUCT,
+        {
+          id: prod.id,
           title,
           description,
           category,
-          price: parseFloat(price),
-          stock: parseInt(stock),
+          price,
+          stock,
           imgUrl: img_url,
         }
       );
-      if (resp?.updateproduct) {
-        alert("updated");
-        settitle("");
-        setdescription("");
-        setcategory("others");
-        setimg("");
-        setprice("");
-        setstock("");
+      if (resp?.updated) {
+        toast("updated");
       }
     } catch (e: any) {
-      toast("Can't update product")
+      console.log(e.message)
+      toast("Can't update product");
     }
   }
 
-  if(user?.role!=="manager") return null;
+  if (user?.role == "staff" || !user) return null;
 
   return (
     <div>
       <Dialog.Root>
         <Dialog.Trigger>
-          <button className="hover:text-blue-600 cursor-pointer" onClick={(e)=> e.stopPropagation()}><Pencil size={20}/></button>
+          <button
+            className="hover:text-blue-600 cursor-pointer"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Pencil size={20} />
+          </button>
         </Dialog.Trigger>
 
         <Dialog.Content maxWidth="450px">
@@ -94,7 +94,7 @@ function Updateproduct({prod}:{prod:Product}) {
               <TextField.Root
                 placeholder="Enter your email"
                 value={price}
-                onChange={(e) => setprice(e.target.value)}
+                onChange={(e) => setprice(parseInt(e.target.value))}
               />
             </label>
             <label>
@@ -104,7 +104,7 @@ function Updateproduct({prod}:{prod:Product}) {
               <TextField.Root
                 placeholder="Enter your email"
                 value={stock}
-                onChange={(e) => setstock(e.target.value)}
+                onChange={(e) => setstock(parseInt(e.target.value))}
               />
             </label>
             <label>
@@ -119,7 +119,7 @@ function Updateproduct({prod}:{prod:Product}) {
             </label>
             <Select.Root
               value={category}
-              onValueChange={(value) => setcategory(value)}
+              onValueChange={(value: ProductCategory) => setcategory(value)}
             >
               <Select.Trigger />
               <Select.Content>

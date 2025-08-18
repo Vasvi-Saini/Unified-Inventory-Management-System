@@ -59,14 +59,14 @@ export const CREATE_SALE = gql`
 `;
 
 export const UPDATE_ROLE = gql`
-  mutation UpdateUserRole($userId: String!, $role: String!) {
+  mutation Mutation($userId: String!, $role: String!) {
     updateUserRole(userId: $userId, role: $role)
   }
 `;
 
 export const DELETE_USER = gql`
   mutation UpdateUserRole($id: String!) {
-     deleteUser(id: $id)
+    deleteUser(id: $id)
   }
 `;
 
@@ -88,13 +88,29 @@ export const UPDATE_USER = gql`
   }
 `;
 
-export const updateprod=gql`
-mutation Updateproduct($prodid: String!, $title: String, $stock: Int, $imgUrl: String, $price: Float, $category: String, $description: String) {
-  updateproduct(prodid: $prodid, title: $title, stock: $stock, img_url: $imgUrl, price: $price, category: $category, description: $description)
-}
-`
-export const removeProd=gql`
-mutation Removeprod($removeprodId: String!) {
-  removeprod(id: $removeprodId)
-}
-`
+export const UPDATE_PRODUCT = gql`
+  mutation Mutation(
+    $id: String!
+    $title: String!
+    $description: String!
+    $category: String!
+    $price: Float!
+    $stock: Int!
+    $imgUrl: String!
+  ) {
+    updated: updateProduct(
+      id: $id
+      title: $title
+      description: $description
+      category: $category
+      price: $price
+      stock: $stock
+      imgUrl: $imgUrl
+    )
+  }
+`;
+export const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($id: String!) {
+   deleted : deleteProduct(id: $id)
+  }
+`;

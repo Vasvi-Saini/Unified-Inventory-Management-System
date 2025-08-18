@@ -1,28 +1,28 @@
 "use client";
-import { AlertDialog, Button, Flex } from "@radix-ui/themes";
-import React from "react";
-import { Trash } from "lucide-react";
-import { useUserContext } from "./contexts/UserContext";
+import { DELETE_PRODUCT } from "@/lib/gql/mutation";
 import gqlClient from "@/services/graphql";
-import { removeProd } from "@/lib/gql/mutation";
+import { AlertDialog, Button, Flex } from "@radix-ui/themes";
+import { Trash } from "lucide-react";
+import React from "react";
+import { useUserContext } from "./contexts/UserContext";
+import { toast } from "sonner";
 function Removeprod({ id }: { id: string }) {
   const { user } = useUserContext();
 
-  async function handleremove(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    e.stopPropagation();
+  async function handleremove() {
+   
     try {
-      const resp: { removeprod: boolean } = await gqlClient.request(
-        removeProd,
+      const resp: { deleted: boolean } = await gqlClient.request(
+        DELETE_PRODUCT,
         {
-          removeprodId: id,
+         id,
         }
       );
-      if (resp?.removeprod) {
-        alert("removed");
+      if (resp?.deleted) {
+        toast("product deleted successfully");
       }
     } catch (e: any) {
-      alert("failed");
+      toast("product deletion failed");
     }
   }
   if (user?.role != "manager") return null;
@@ -46,7 +46,7 @@ function Removeprod({ id }: { id: string }) {
                 Cancel
               </Button>
             </AlertDialog.Cancel>
-            <AlertDialog.Action asChild>
+            <AlertDialog.Action >
               <button
                 onClick={handleremove}
                 className="px-3 py-1 bg-red-600 text-white rounded"

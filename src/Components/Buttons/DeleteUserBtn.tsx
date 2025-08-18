@@ -4,15 +4,16 @@ import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import { toast } from "sonner";
 import { useUserContext } from "../contexts/UserContext";
 import { Trash } from "lucide-react";
+import { User } from "../../../generated/prisma";
 
-export default function DeleteUserBtn() {
-  const { user } = useUserContext();
+export default function DeleteUserBtn({user} : {user : User}) {
+ 
   async function handleremove() {
     try {
       const res: { deleteUser: boolean } = await gqlClient.request(
         DELETE_USER,
         {
-          userId: user?.id,
+          id: user?.id,
         }
       );
       if (res.deleteUser) {

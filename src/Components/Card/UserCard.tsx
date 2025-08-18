@@ -16,14 +16,14 @@ export default function UserCard({ user }: { user: User }) {
       className="hover:shadow-lg transition-all border relative"
     >
       <div className="absolute top-2 right-2 gap-2 flex">
-        <EditUserBtn />
-        <DeleteUserBtn />
+        <EditUserBtn user={user} />
+        <DeleteUserBtn user={user}/>
       </div>
 
       <Flex gap="3" align="center" p="3">
         <Avatar
           size="3"
-          src={user.avatar}
+          src={user.avatar || ""}
           radius="full"
           fallback={user?.name?.charAt(0) || "A"}
         />

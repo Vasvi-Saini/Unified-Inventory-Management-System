@@ -91,7 +91,9 @@ export async function createSale(
   }
 }
 
-export async function removeprod(x: any, args: any) {
+export async function deleteProduct(_: any, args: {
+  id : string
+}) {
   try {
     const resp = await prismaClient.product.delete({
       where: {
@@ -100,6 +102,44 @@ export async function removeprod(x: any, args: any) {
     });
     return true;
   } catch (e: any) {
+    console.log("error on server while deleting, ", e.message)
+    alert("")
     return false;
+  }
+}
+
+export async function updateProduct(
+  _: any,
+  args: {
+    id: string;
+    title: string;
+    description: string;
+    category: ProductCategory;
+    price: number;
+    stock: number;
+    imageUrl: string;
+  }
+) {
+  const dataToUpdate = {
+    title : args.title,
+    description : args.description,
+    category : args.category,
+    price : args.price,
+    stock : args.stock,
+    imageUrl : args.imageUrl
+  }
+
+  try{
+    const res = await prismaClient.product.update({
+      where : {
+        id : args.id
+      },
+      data : dataToUpdate
+    })
+    if(res.id) return true;
+    return false;
+  }catch(err : any){
+    console.log("err on server while updating ", err.message)
+    return false
   }
 }

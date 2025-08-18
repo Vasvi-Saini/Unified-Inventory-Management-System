@@ -3,9 +3,8 @@ import { GET_ALL_PRODUCTS } from "@/lib/gql/queries";
 import gqlClient from "@/services/graphql";
 import { useEffect, useState } from "react";
 import { Product } from "../../generated/prisma";
-import Link from "next/link";
-import ProductCard from "./Card/ProductCard";
 import AddProduct from "./Buttons/AddProduct";
+import ProductCard from "./Card/ProductCard";
 import { useUserContext } from "./contexts/UserContext";
 
 export default function ProductList({ className }: { className: string }) {
@@ -37,11 +36,11 @@ export default function ProductList({ className }: { className: string }) {
       <div className={`${className} gap-6 w-full`} >
         {products?.map((product) => (
           
-          <Link key={product.id} href={"/product/" + product.id}>
+         
             
-            <ProductCard product={product} />
+            <ProductCard  key={product.id} product={product} />
 
-          </Link>
+         
 
         ))}
       </div>

@@ -5,11 +5,11 @@ import { Button, Dialog, Flex, Select } from "@radix-ui/themes";
 import { Edit } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useUserContext } from "../contexts/UserContext";
+import { RoleType, User } from "../../../generated/prisma";
 
-export default function EditUserBtn() {
-  const [role, setRole] = useState("");
-  const { user } = useUserContext();
+export default function EditUserBtn({user} : {user : User}) {
+  
+  const [role, setRole] = useState(user?.role);
 
   async function handleEditRole() {
     try {
@@ -17,7 +17,7 @@ export default function EditUserBtn() {
         UPDATE_ROLE,
         {
           userId: user?.id,
-          role: user?.role,
+          role: role,
         }
       );
       console.log("res from user role updation", res);
@@ -44,13 +44,13 @@ export default function EditUserBtn() {
             Select user role..
           </Dialog.Description>
 
-          <Select.Root value={role} onValueChange={setRole}>
+          <Select.Root value={role} onValueChange={(val : RoleType)=>setRole(val)}>
             <Select.Trigger placeholder="Role" />
             <Select.Content>
               <Select.Group>
                 <Select.Label>Role</Select.Label>
-                <Select.Item value="electronics">Manager</Select.Item>
-                <Select.Item value="clothing">Staff</Select.Item>
+                <Select.Item value="manager">Manager</Select.Item>
+                <Select.Item value="staff">Staff</Select.Item>
               </Select.Group>
             </Select.Content>
           </Select.Root>
