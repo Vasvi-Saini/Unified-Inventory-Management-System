@@ -17,10 +17,10 @@ export default function page() {
     // </div>
     // pages/index.js or app/page.js
 
-    <div className="relative ">
+    <div className="relative">
       {/* Hero Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="fixed top-0 left-0 z-0 inset-0 w-[99vw]  bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
         }}
@@ -50,9 +50,9 @@ export default function page() {
           </div>
         </nav>
       </header> */}
-
+ 
       {/* Hero Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen px-6 -mt-20">
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-6">
         <div className="text-center text-white max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
             Unified Inventory
