@@ -54,7 +54,7 @@ export default function ProfileDropDown() {
                 <Flex gap="3" align="center">
                   <Avatar
                     size="3"
-                    src={user?.avatar}
+                    src={user?.avatar || ""}
                     radius="full"
                     fallback={user?.name.charAt(0).toUpperCase() || ""}
                   />
@@ -71,7 +71,7 @@ export default function ProfileDropDown() {
             </Box>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-50 bg-[#18191B] text-white border font-medium"
+            className="w-50  bg-[#18191B] text-white border font-medium"
             align="start"
           >
             <DropdownMenuLabel>My Account</DropdownMenuLabel>

@@ -118,8 +118,20 @@ const server = new ApolloServer({
 });
 
 // Typescript: req has the type NextRequest
-const handler = startServerAndCreateNextHandler<NextRequest>(server, {
-  context: async (req) => ({ req }),
-});
+const handler = startServerAndCreateNextHandler(server);
 
-export { handler as GET, handler as POST };
+export async function GET(request : NextRequest){
+  return handler(request)
+}
+
+export async function POST(request:NextRequest) {
+    return handler(request)
+}
+
+// kaam vhi hora h bus syntax change ho gya acha thik h
+
+// ye ek or error h jo hamesha ata h graql k projects menubarjo 
+// jo medium se humne copy kiya tha code vo old ho gya h kaam ni krta acha toh?
+// krte h isko change ky hua???
+
+
