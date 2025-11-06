@@ -99,7 +99,7 @@ export default function ProfilePage() {
         {!isEditing ? (
           <button
             onClick={handleEdit}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-700 dark:bg-gray-800 hover:bg-blue-700 dark:hover:bg-white hover: text-white dark:hover:text-black  transition-colors duration-300"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-700 dark:bg-gray-800  bg-blue-600 hover:bg-blue-800 dark:hover:bg-white text-white cursor-pointer dark:hover:text-black  transition-colors duration-300"
           >
             <Edit3 size={18} />
             Update Profile

@@ -25,14 +25,12 @@ export default function page() {
       if (data.loginUser) {
         toast("LoggedIn successfully...");
         window.location.href = "/";
-      }
-       else {
+      } else {
         setError({
           message: "Invalid Credentials!",
         });
       }
-    }
-     catch (e) {
+    } catch (e) {
       setError({
         message: "Something went wrong",
       });
@@ -48,25 +46,34 @@ export default function page() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            border : "2"
+            border: "2",
           }}
         >
-         <div className=" gap-5 p-4 ">
+          <div className="flex flex-col gap-5 p-4 items-center">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">U</span>
+              </div>
+              <span className="dark:text-white text-black font-semibold text-xl">
+                UIMS
+              </span>
+            </div>
+            <div className="font-medium">
+              <p className="font-semibold text-blue-400 pb-2">
+                Guest Login Credentials:-
+              </p>
+              <span className="text-green-400">Email:</span> admin04@gmail.com
+              <br />
+              <span className="text-green-400">Password:</span> Admin@04
+            </div>
+          </div>
 
-           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">U</span>
-            </div>
-            <span className="dark:text-white text-black font-semibold text-xl">UIMS</span>
-            </div>
-           </div>
-          
           {/* <Heading align={"center"} style={{margin : "20px 0"}}>Store Management </Heading> */}
           <TextField.Root
             placeholder="Enter Username or Email.."
             value={userCred}
             onChange={(e) => setUserCred(e.target.value)}
-            className="w-96 mb-5"
+            className="w-96 mb-5 mt-4"
           />
           <TextField.Root
             placeholder="Enter Password.."
@@ -86,7 +93,6 @@ export default function page() {
           </Button>
         </Card>
       </div>
-     
     </main>
   );
 }

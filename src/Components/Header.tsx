@@ -22,10 +22,10 @@ export default function Header() {
               <div className="absolute -inset-0.5 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur"></div>
             </div>
             <div className="hidden sm:block">
-              <span className="text-white font-bold text-xl tracking-tight drop-shadow-lg">
+              <span className="dark:text-white font-bold text-xl tracking-tight drop-shadow-lg">
                 UIMS
               </span>
-              <div className="text-xs text-white/80 -mt-0.5 drop-shadow-md">
+              <div className="text-xs dark:text-white/80 -mt-0.5 drop-shadow-md">
                 Inventory Management
               </div>
             </div>
