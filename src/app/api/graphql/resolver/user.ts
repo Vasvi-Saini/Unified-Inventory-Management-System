@@ -35,7 +35,8 @@ export async function loginUser(
     } else {
       return false;
     }
-  } catch (e) {
+  } catch (e: any) {
+    console.error("Login resolver error:", e?.message || e);
     return false;
   }
 }
