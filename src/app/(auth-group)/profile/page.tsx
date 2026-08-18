@@ -1,7 +1,7 @@
 "use client";
 import { Avatar } from "@radix-ui/themes";
 import { AtSign, Edit3, Mail, Save, Shield, User, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import EditAvatarBtn from "@/Components/Buttons/EditAvatarBtn";
 import { useUserContext } from "@/Components/contexts/UserContext";
@@ -33,22 +33,36 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
 
   const { user, setUser } = useUserContext();
-  const [name, setName] = useState(user?.name);
-  const [email, setEmail] = useState(user?.email);
-  const [username, setUsername] = useState(user?.username);
-  const [avatar, setAvatar] = useState(user?.avatar);
+  const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [username, setUsername] = useState(user?.username || "");
+  const [avatar, setAvatar] = useState(user?.avatar || "");
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "");
+      setEmail(user.email || "");
+      setUsername(user.username || "");
+      setAvatar(user.avatar || "");
+    }
+  }, [user]);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = async () => {
+    const currentName = name || user?.name || "";
+    const currentEmail = email || user?.email || "";
+    const currentUsername = username || user?.username || "";
+    const currentAvatar = avatar || user?.avatar || "";
+
     const updatedUser = {
       userId: user?.id,
-      name: name,
-      username: username,
-      email: email,
-      avatar: avatar,
+      name: currentName,
+      username: currentUsername,
+      email: currentEmail,
+      avatar: currentAvatar,
     };
 
     try {
@@ -58,6 +72,15 @@ export default function ProfilePage() {
       console.log("res", res);
       if (res?.updated) {
         toast("profile updated successfully!");
+        if (setUser && user) {
+          setUser({
+            ...user,
+            name: currentName,
+            email: currentEmail,
+            username: currentUsername,
+            avatar: currentAvatar,
+          });
+        }
       } else {
         toast("Something went wrong!");
       }
@@ -70,10 +93,10 @@ export default function ProfilePage() {
 
   const handleCancel = () => {
     setIsEditing(false);
-    setUsername(user?.username);
-    setName(user?.name);
-    setEmail(user?.email);
-    setAvatar(user?.avatar);
+    setUsername(user?.username || "");
+    setName(user?.name || "");
+    setEmail(user?.email || "");
+    setAvatar(user?.avatar || "");
   };
 
   const getRoleBadgeStyle = (role: string) => {
