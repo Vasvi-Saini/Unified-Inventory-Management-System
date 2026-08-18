@@ -14,8 +14,13 @@ export async function getUserFromCookies(){
             where :{
                 id : data?.id
             },
-            omit : {
-             password : true
+            select : {
+              id: true,
+              name: true,
+              email: true,
+              username: true,
+              avatar: true,
+              role: true
             }
         })
 

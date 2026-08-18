@@ -30,7 +30,13 @@ export async function loginUser(
       //set token
 
       const token = generateToken({ id: user.id });
-      cookieStore.set("token", token);
+      cookieStore.set("token", token, {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60, // 7 days
+      });
       return true;
     } else {
       return false;
