@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import UserContextProvider from '@/Components/contexts/UserContext';
 import Header from '@/Components/Header';
 import { getUserFromCookies } from '@/lib/helper'
