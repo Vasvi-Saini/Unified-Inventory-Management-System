@@ -18,34 +18,37 @@ export default function AddProduct() {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState(99.99);
   const [stock, setStock] = useState(0);
-  const [imageUrl, setImageUrl] = useState("")
+  const [imageUrl, setImageUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleAddUser(){
-	try{
+    setLoading(true);
+    try{
      const data : { addProduct : User}= await gqlClient.request(ADD_PRODUCT,{
-		category,
-    description,
-    imageUrl,
-    price,
-    stock,
-    title
-	 })
-	 if(data?.addProduct){
-		alert("Product created successfully")
-		setTitle("");
-		setDescription("");		
-		setCategory("");
-		setPrice(0);			
-		setImageUrl("");
-        setStock(0)
-		}
-		else{
-		alert("Failed to add Product");
-		}
-	}
-	catch(e: any){
+        category,
+        description,
+        imageUrl,
+        price,
+        stock,
+        title
+     });
+     if(data?.addProduct){
+        alert("Product created successfully");
+        setTitle("");
+        setDescription("");		
+        setCategory("");
+        setPrice(0);			
+        setImageUrl("");
+        setStock(0);
+        window.location.reload();
+     } else {
+        alert("Failed to add Product");
+     }
+    } catch(e: any){
       alert(e.message);
-	}
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -129,9 +132,9 @@ export default function AddProduct() {
                 Cancel
               </Button>
             </Dialog.Close>
-            <Dialog.Close>
-              <Button onClick={handleAddUser}>Save</Button>
-            </Dialog.Close>
+            <Button disabled={loading} onClick={handleAddUser}>
+              {loading ? "Saving..." : "Save"}
+            </Button>
           </Flex>
         </Dialog.Content>
       </Dialog.Root>

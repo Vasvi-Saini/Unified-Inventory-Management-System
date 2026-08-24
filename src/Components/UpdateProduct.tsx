@@ -18,6 +18,8 @@ import { toast } from "sonner";
 import { Product, ProductCategory } from "../../generated/prisma";
 import { useUserContext } from "./contexts/UserContext";
 
+import { Spinner } from "./ui/Spinner";
+
 function Updateproduct({ prod }: { prod: Product }) {
   const { user } = useUserContext();
   const [title, settitle] = useState(prod.title);
@@ -26,8 +28,10 @@ function Updateproduct({ prod }: { prod: Product }) {
   const [price, setprice] = useState(prod.price);
   const [stock, setstock] = useState(prod.stock);
   const [img_url, setimg] = useState(prod.imageUrl);
+  const [updating, setupdating] = useState(false);
 
   async function handelupdateproduct() {
+    setupdating(true);
     try {
       const resp: { updated: boolean } = await gqlClient.request(
         UPDATE_PRODUCT,
@@ -42,11 +46,16 @@ function Updateproduct({ prod }: { prod: Product }) {
         }
       );
       if (resp?.updated) {
-        toast("updated");
+        toast("Updated successfully!");
+        window.location.reload();
+      } else {
+        toast("Can't update product");
       }
     } catch (e: any) {
-      console.log(e.message)
+      console.log(e.message);
       toast("Can't update product");
+    } finally {
+      setupdating(false);
     }
   }
 
@@ -140,13 +149,14 @@ function Updateproduct({ prod }: { prod: Product }) {
 
           <Flex gap="3" mt="4" justify="end">
             <Dialog.Close>
-              <Button variant="soft" color="gray">
+              <Button variant="soft" color="gray" disabled={updating}>
                 Cancel
               </Button>
             </Dialog.Close>
-            <Dialog.Close>
-              <Button onClick={handelupdateproduct}>Save</Button>
-            </Dialog.Close>
+            <Button disabled={updating} onClick={handelupdateproduct}>
+              {updating && <Spinner size={16} />}
+              {updating ? "Saving..." : "Save"}
+            </Button>
           </Flex>
         </Dialog.Content>
       </Dialog.Root>

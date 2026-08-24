@@ -7,6 +7,7 @@ import EditAvatarBtn from "@/Components/Buttons/EditAvatarBtn";
 import { useUserContext } from "@/Components/contexts/UserContext";
 import { UPDATE_USER } from "@/lib/gql/mutation";
 import gqlClient from "@/services/graphql";
+import { Spinner } from "@/Components/ui/Spinner";
 import { toast } from "sonner";
 
 interface UserProfile {
@@ -47,11 +48,14 @@ export default function ProfilePage() {
     }
   }, [user]);
 
+  const [saving, setSaving] = useState(false);
+
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = async () => {
+    setSaving(true);
     const currentName = name || user?.name || "";
     const currentEmail = email || user?.email || "";
     const currentUsername = username || user?.username || "";
@@ -87,6 +91,8 @@ export default function ProfilePage() {
     } catch (err: any) {
       console.log("error while updating user", err.message);
       toast("Something went wrong!");
+    } finally {
+      setSaving(false);
     }
     setIsEditing(false);
   };
@@ -111,7 +117,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen dark:bg-gradient-to-br from-gray-900 via-black to-gray-800 dark:text-white px-6 py-10">
+    <div className="min-h-[92vh] dark:bg-gradient-to-br from-gray-900 via-black to-gray-800 dark:text-white px-6 py-10">
       {/* Header */}
       <div className="max-w-5xl mx-auto flex items-center justify-between mb-10">
         <div>
@@ -122,7 +128,7 @@ export default function ProfilePage() {
         {!isEditing ? (
           <button
             onClick={handleEdit}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-700 dark:bg-gray-800  bg-blue-600 hover:bg-blue-800 dark:hover:bg-white text-white cursor-pointer dark:hover:text-black  transition-colors duration-300"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-700 dark:bg-gray-800 bg-blue-600 hover:bg-blue-800 dark:hover:bg-white text-white cursor-pointer dark:hover:text-black transition-colors duration-300"
           >
             <Edit3 size={18} />
             Update Profile
@@ -131,10 +137,11 @@ export default function ProfilePage() {
           <div className="flex gap-3">
             <button
               onClick={handleSave}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-500 text-black hover:bg-green-600 transition-colors duration-300"
+              disabled={saving}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-500 text-black hover:bg-green-600 transition-colors duration-300 cursor-pointer disabled:opacity-50"
             >
-              <Save size={18} />
-              Save
+              {saving ? <Spinner size={18} /> : <Save size={18} />}
+              {saving ? "Saving..." : "Save"}
             </button>
             <button
               onClick={handleCancel}
@@ -222,10 +229,8 @@ export default function ProfilePage() {
               </div>
 
               {/* Email */}
-
               <div>
                 <label className="block text-sm mb-2 light:text-black">
-                  {" "}
                   Email
                   <input
                     placeholder="Email Address"
@@ -240,20 +245,17 @@ export default function ProfilePage() {
 
               {/* Username */}
               <div>
-                <label className="block text-sm mb-2 light:text-black ">
-                  {" "}
+                <label className="block text-sm mb-2 light:text-black">
                   @ Username
-                  <div className="relative ">
-                    <span className=" px-2 ml-1 absolute left-0 bottom-1 transform -translate-y-1/2 text-white pointer-events-none text-base font-semibold">
+                  <div className="relative">
+                    <span className="px-2 ml-1 absolute left-0 bottom-1 transform -translate-y-1/2 text-white pointer-events-none text-base font-semibold">
                       @
                     </span>
-
                     <input
                       placeholder="Username"
                       value={username}
                       disabled={!isEditing}
                       onChange={(e) => setUsername(e.target.value)}
-                      prefix="@"
                       className="px-7 py-4 dark:bg-gray-900 border border-gray-700 rounded-lg w-full mt-2"
                     />
                   </div>

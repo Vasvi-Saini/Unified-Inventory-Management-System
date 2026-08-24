@@ -3,6 +3,7 @@ import { LOGIN_USER } from "@/lib/gql/queries";
 import gqlClient from "@/services/graphql";
 import { Button, Card, Text, TextField } from "@radix-ui/themes";
 import { useState } from "react";
+import Image from "next/image";
 import { toast } from "sonner";
 
 export default function page() {
@@ -14,13 +15,13 @@ export default function page() {
 
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin() {
+  async function performLogin(cred: string, pass: string) {
     setError({});
     setLoading(true);
     try {
       const data: { loginUser: boolean } = await gqlClient.request(LOGIN_USER, {
-        userCred,
-        password,
+        userCred: cred,
+        password: pass,
       });
       if (data.loginUser) {
         toast("LoggedIn successfully...");
@@ -38,59 +39,77 @@ export default function page() {
     setLoading(false);
   }
 
+  function handleDemoLogin() {
+    const demoEmail = "admin04@gmail.com";
+    const demoPass = "Admin@04";
+    setUserCred(demoEmail);
+    setPassword(demoPass);
+    performLogin(demoEmail, demoPass);
+  }
+
   return (
-    <main>
-      <div className="w-full h-screen flex justify-center items-center gap-5  ">
+    <main className="px-4">
+      <div className="w-full h-screen flex justify-center items-center">
         <Card
           style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            border: "2",
           }}
+          className="p-6 sm:p-8 w-full max-w-sm sm:w-96 shadow-lg border border-gray-200 dark:border-gray-800"
         >
-          <div className="flex flex-col gap-5 p-4 items-center">
+          <div className="flex flex-col gap-4 p-2 items-center mb-2">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">U</span>
-              </div>
+              <Image
+                src="/icon.png"
+                alt="UIMS Logo"
+                width={44}
+                height={44}
+                className="w-11 h-11 rounded-xl object-cover shadow-md"
+              />
               <span className="dark:text-white text-black font-semibold text-xl">
                 UIMS
               </span>
             </div>
-            <div className="font-medium">
-              <p className="font-semibold text-blue-400 pb-2">
-                Guest Login Credentials:-
-              </p>
-              <span className="text-green-400">Email:</span> admin04@gmail.com
-              <br />
-              <span className="text-green-400">Password:</span> Admin@04
-            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Inventory Management System</p>
           </div>
 
-          {/* <Heading align={"center"} style={{margin : "20px 0"}}>Store Management </Heading> */}
-          <TextField.Root
-            placeholder="Enter Username or Email.."
-            value={userCred}
-            onChange={(e) => setUserCred(e.target.value)}
-            className="w-96 mb-5 mt-4"
-          />
-          <TextField.Root
-            placeholder="Enter Password.."
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-96 mb-5"
-          />
+          <div className="w-full space-y-4">
+            <TextField.Root
+              placeholder="Enter Username or Email.."
+              value={userCred}
+              onChange={(e) => setUserCred(e.target.value)}
+              className="w-full"
+            />
+            <TextField.Root
+              type="password"
+              placeholder="Enter Password.."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full"
+            />
+          </div>
+
           {error.message && (
-            <Text style={{ color: "red" }}>{error.message}</Text>
+            <Text style={{ color: "red" }} className="mt-3 text-sm">{error.message}</Text>
           )}
-          <Button
-            disabled={loading}
-            onClick={handleLogin}
-            style={{ width: "100%", margin: "20px 0" }}
-          >
-            <Text>Login</Text>
-          </Button>
+
+          <div className="w-full flex flex-col gap-3 mt-6">
+            <Button
+              disabled={loading}
+              onClick={() => performLogin(userCred, password)}
+              className="w-full cursor-pointer py-2.5 font-medium"
+            >
+              <Text>{loading ? "Signing in..." : "Login"}</Text>
+            </Button>
+            <Button
+              disabled={loading}
+              onClick={handleDemoLogin}
+              className="w-full cursor-pointer py-2.5 font-medium"
+            >
+              <Text>{loading ? "Signing in..." : "Try Demo Login"}</Text>
+            </Button>
+          </div>
         </Card>
       </div>
     </main>

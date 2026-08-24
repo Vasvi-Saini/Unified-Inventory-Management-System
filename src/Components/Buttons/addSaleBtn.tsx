@@ -22,18 +22,20 @@ import { toast } from "sonner";
 
 
 export default function AddSaleButton({ product }: { product: Product }) {
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [loading, setLoading] = useState(false);
 
   function clearFields() {
     setQuantity(1);
   }
 
   async function handleSale() {
-    if (product.stock < quantity || quantity == 0) {
-      toast("Sale quantity can not be more than avalaible stock!");
+    if (product.stock < quantity || quantity <= 0) {
+      toast("Sale quantity can not be more than available stock!");
       return;
     }
 
+    setLoading(true);
     try {
       const data: { createSale: Boolean } = await gqlClient.request(
         CREATE_SALE,
@@ -45,11 +47,15 @@ export default function AddSaleButton({ product }: { product: Product }) {
       if (data?.createSale) {
         toast("Sale Created Successfully!");
         clearFields();
+        window.location.reload();
       } else {
         toast("Sale creation aborted!");
       }
     } catch (e: any) {
       console.log(e.message);
+      toast("Error creating sale!");
+    } finally {
+      setLoading(false);
     }
   }
   return (
